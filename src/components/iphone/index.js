@@ -122,8 +122,9 @@ export default class Iphone extends Component {
 		var zip = parsed_json['current_observation']['display_location']['zip'];
 		var magic = parsed_json['current_observation']['display_location']['magic'];
 		var wmo = parsed_json['current_observation']['display_location']['wmo'];
-		var temp_high = parsed_json['trip']['temp_high']['avg']['C'];
-		var temp_low = parsed_json['trip']['temp_low']['avg']['C'];
+		var temp_high = parsed_json['trip']['temp_high']['max']['C'];
+		var temp_low = parsed_json['trip']['temp_low']['min']['C'];
+		var cloudCover = parsed_json['trip']['cloud_cover']['cond'];
 		var chanceOfPrecip = parsed_json['trip']['chance_of']['chanceofprecip']['percentage'];
 		var chanceOfRain = parsed_json['trip']['chance_of']['chanceofrainday']['percentage'];
 		var chanceOfHail = parsed_json['trip']['chance_of']['chanceofhailday']['percentage'];
@@ -135,8 +136,8 @@ export default class Iphone extends Component {
 		// set states for fields so they could be rendered later on
 		this.setState({
 			locate: location,
-			temp_high: temp_high,
-			temp_low: temp_low,
+			tempHigh: temp_high,
+			tempLow: temp_low,
 			chancePrecip: chanceOfPrecip,
 			chanceRain: chanceOfRain,
 			chanceHail: chanceOfHail,
