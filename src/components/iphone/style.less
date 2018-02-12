@@ -3,8 +3,7 @@
 .container {
 	display: flex;
 	flex-direction: column;
-	//background-image: url('../../assets/backgrounds/clear-iphone.jpg');
-	background-color:#B3DCDF;
+	background-color:@lightblue;
 	color: #fff;
 	width: 414px;
 	height: 736px;
@@ -12,36 +11,33 @@
 	padding-top: 10px;
 	margin: 0 auto;
 }
-//.header {
-	// display: flex;
-	// flex-direction: column;
-	// flex: 1;
-//}
-// .details {
-// 	flex: 4;
-// }
-// .city {
-// 	flex: 1;
-// 	font-size: 1.7em;
-// 	font-weight: 400;
-// }
-// .conditions {
-// 	flex: 1;
-// 	font-size: 1em;
-// }
-// .temperature {
-// 	flex: 2;
-// 	margin-top: 0;
-// 	font-size: 4.8em;
-// 	font-weight: 300;
-// 	letter-spacing: -12px;
-// }
-// .filled:after {
-// 	content: "°";
-// 	margin: 0 0 0 1rem;
-// 	font-size: 0.5em;
-// 	font-weight: 100;
-// 	display: inline-block;
-// 	padding-top: 10px;
-// 	vertical-align: top;
-// }
+
+div.nav {
+  background-color: #D8DDDD;
+  width: 100%;
+  padding:7px;
+	margin: 0 auto;
+}
+
+input[type=text] {
+  vertical-align:top;
+  font-size: 20px;
+  padding: 7px 7px 7px 20px;
+  background: #fff;
+  color:@nearblack;
+  border: 1px solid #fff;
+  font-weight: 500;
+  border-radius: 25px;
+  //transition: all 0.3s ease-in-out;
+  width:100%;
+}
+
+//search icon
+input[type=image] {
+  vertical-align:top;
+	padding-right:5px;
+  margin-left: -45px;
+  height: 40px;
+  border: 0;
+  -webkit-appearance: none;
+}

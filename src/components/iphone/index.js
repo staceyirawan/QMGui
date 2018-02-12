@@ -7,9 +7,8 @@ import $ from 'jquery';
 // import the Button component
 import Button from '../button';
 import style_iphone from '../button/style_iphone';
-import Search from '../search';
-import TripSummary from '../tripsummary';
-import DailyForecast from '../dailyforecast';
+import TripSummary from '../tripSummary';
+import DailyForecast from '../dailyForecast';
 
 export default class Iphone extends Component {
 //var Iphone = React.createClass({
@@ -53,28 +52,24 @@ export default class Iphone extends Component {
 		return (
 			<div class={ style.container }>
 				<div class={ style.header }>
-					<div class={ style.city }>{ this.state.locate }</div>
-					<div class={ style.conditions }>{ this.state.chancePrecip }</div>
-					<div class={ style.conditions }>Chance of Rain: { this.state.chanceRain }</div>
-					<div class={ style.conditions }>Chance of Hail: { this.state.chanceHail }</div>
-					<span class={ tempStyles }>{ this.state.temp }</span>
+						<div class={ style.city }>{ this.state.locate }</div>
+						<div class={ style.conditions }>{ this.state.chancePrecip }</div>
+						<div class={ style.conditions }>Chance of Rain: { this.state.chanceRain }</div>
+						<div class={ style.conditions }>Chance of Hail: { this.state.chanceHail }</div>
+						<span class={ tempStyles }>{ this.state.temp }</span>
 				</div>
 				<div class={ style.details }></div>
 				<div class= { style_iphone.container }>
 					{ this.state.display ?
 						<div>
-							<Search />
+							<div className={style.nav}>
+				          <input id="tripParameters" type="text" name="trip" value="Istanbul, 4/2 - 9/2"/>
+									<input type="image" name="search" src="https://d30y9cdsu7xlg0.cloudfront.net/png/15028-200.png"
+									onClick={ this.fetchWeatherData } />
+							</div>
 							<TripSummary />
 							<DailyForecast />
-
-							<div>
-								<br/>
-								<input id="tripParameters" type="text" value="City, Country, Date1, Date2"></input>
-								<Button class={ style_iphone.button } clickFunction={ this.fetchWeatherData }/ >
-							</div>
 						</div> : null }
-
-
 				</div>
 			</div>
 		);
