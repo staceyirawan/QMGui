@@ -155,7 +155,8 @@ export default class Iphone extends Component {
 		var alertArray = parsed_json['alerts'];
 		var alerts = [];
 		for ( var i =0; i < numAlerts; i++){
-			var alertPair = [parsed_json['alerts'][i]['wtype_meteoalarm_name'], parsed_json['alerts'][i]['level_meteoalarm_description']];
+			//grabbing name of alert and the color warning
+			var alertPair = [parsed_json['alerts'][i]['wtype_meteoalarm_name'], parsed_json['alerts'][i]['level_meteoalarm_name']]; 
 			alerts.push(alertPair);
 		}
 
