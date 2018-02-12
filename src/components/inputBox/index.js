@@ -13,7 +13,7 @@ export default class Button extends Component {
 		return (
 			<div>
 				<button onClick={clickFunction}>
-					GO
+					Display Weather
 				</button>
 			</div>
 		);
