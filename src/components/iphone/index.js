@@ -13,6 +13,7 @@ import DailyForecast from '../dailyForecast';
 export default class Iphone extends Component {
 //var Iphone = React.createClass({
 
+
 	// a constructor with initial set states
 	constructor(props){
 		super(props);
@@ -20,7 +21,23 @@ export default class Iphone extends Component {
 		this.state.temp = "";
 		this.state.tripArray = []; //stores input box value
 		this.state.dayArray = []; //stores info on daily forecast
-		//this.state.alertArray = [];
+		this.state.alertArray = [];
+		this.state.itemBool = {
+			"Winter Jacket": false,
+			"Fleece Jacket": false,
+			"Windbreaker": false,
+			"Long Underwear": false,
+			"T-shirts": false,
+			"Long Sleeves": false,
+			"Light Sweater/Hoodie": false,
+			"Heavy Sweater": false,
+			"Shorts": false,
+			"Pants": false,
+			"Sunglasses": false,
+			"Umbrella": false,
+			"Snow Boots": false,
+			"Gloves/Scarf": false,
+		}; //dictionary of items, false if not suggested
 		// button display state
 		this.setState({ display: true });
 	}
@@ -47,15 +64,13 @@ export default class Iphone extends Component {
 	render() {
 		// check if temperature data is fetched, if so add the sign styling to the page
 		const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
-
+		console.log(this.state.itemBool);
 		// display all weather data
 		return (
 			<div class={ style.container }>
 				<div class={ style.header }>
 						<div class={ style.city }>{ this.state.locate }</div>
 						<div class={ style.conditions }>{ this.state.chancePrecip }</div>
-						<div class={ style.conditions }>Chance of Rain: { this.state.chanceRain }</div>
-						<div class={ style.conditions }>Chance of Hail: { this.state.chanceHail }</div>
 						<span class={ tempStyles }>{ this.state.temp }</span>
 				</div>
 				<div class={ style.details }></div>
@@ -120,13 +135,46 @@ export default class Iphone extends Component {
 		var temp_high = parsed_json['trip']['temp_high']['max']['C'];
 		var temp_low = parsed_json['trip']['temp_low']['min']['C'];
 		var cloudCover = parsed_json['trip']['cloud_cover']['cond'];
-		var chanceOfPrecip = parsed_json['trip']['chance_of']['chanceofprecip']['percentage'];
-		var chanceOfRain = parsed_json['trip']['chance_of']['chanceofrainday']['percentage'];
-		var chanceOfHail = parsed_json['trip']['chance_of']['chanceofhailday']['percentage'];
-		var chanceofWind = parsed_json['trip']['chance_of']['chanceofwindyday']['percentage'];
-		var chanceOfSnow = parsed_json['trip']['chance_of']['chanceofsnowday']['percentage'];
-		var chanceOfFreezing = parsed_json['trip']['chance_of']['tempbelowfreezing']['percentage'];
-		var chanceOfHot = parsed_json['trip']['chance_of']['tempoverninety']['percentage'];
+		var chanceOfPrecip = parseInt(parsed_json['trip']['chance_of']['chanceofprecip']['percentage']);
+		var chanceOfRain = parseInt(parsed_json['trip']['chance_of']['chanceofrainday']['percentage']);
+		var chanceOfHail = parseInt(parsed_json['trip']['chance_of']['chanceofhailday']['percentage']);
+		var chanceOfWind = parseInt(parsed_json['trip']['chance_of']['chanceofwindyday']['percentage']);
+		var chanceOfSnow = parseInt(parsed_json['trip']['chance_of']['chanceofsnowday']['percentage']);
+		var chanceOfSnowGround = parseInt(parsed_json['trip']['chance_of']['chanceofsnowonground']['percentage']);
+		var chanceOverFreezing = parseInt(parsed_json['trip']['chance_of']['tempoverfreezing']['percentage']);//Cool weather
+		var chanceOfFreezing = parseInt(parsed_json['trip']['chance_of']['tempbelowfreezing']['percentage']); //Below Freezing
+		var chanceOfHot = parseInt(parsed_json['trip']['chance_of']['tempoverninety']['percentage']); //over 90
+		var chanceOverSixty = parseInt(parsed_json['trip']['chance_of']['tempoversixty']['percentage']);//over 60
+		
+		if (chanceOfRain > 30 || chanceOfPrecip > 30){
+			this.state.itemBool['Umbrella'] = true;
+		}
+		if (chanceOfWind > 30){
+			this.state.itemBool['Windbreaker'] = true;
+		}
+		if (chanceOfSnowGround > 30){
+			this.state.itemBool['Snow Boots'] = true;
+		}
+		if (chanceOfSnow > 30){
+			this.state.itemBool['Winter Jacket'] = true;
+		}
+		if (chanceOfHot > 30){
+			this.state.itemBool['T-shirts'] = true;
+			this.state.itemBool['Shorts'] = true;
+			this.state.itemBool['Sunglasses'] = true;
+		}
+		if (chanceOfFreezing > 30){ //Below Freezing
+			this.state.itemBool['Winter Jacket'] = true;
+			this.state.itemBool['Long Underwear'] = true;
+			this.state.itemBool['Gloves/Scarf'] = true;
+		}
+		if (chanceOverSixty > 30){
+			this.state.itemBool['Light Sweater/Hoodie'] = true;
+		}
+		if (chanceOverFreezing > 30){
+			this.state.itemBool['Fleece Jacket'] = true;
+			this.state.itemBool['Heavy Sweater'] = true;
+		}
 
 		// set states for fields so they could be rendered later on
 		this.setState({
@@ -136,7 +184,7 @@ export default class Iphone extends Component {
 			chancePrecip: chanceOfPrecip,
 			chanceRain: chanceOfRain,
 			chanceHail: chanceOfHail,
-			chanceWind: chanceofWind,
+			chanceWind: chanceOfWind,
 			chanceSnow: chanceOfSnow,
 			chanceFreeze: chanceOfFreezing,
 			chanceHot: chanceOfHot,
@@ -155,9 +203,7 @@ export default class Iphone extends Component {
 			alerts.push(alertPair);
 		}
 
-		this.setState({
-			alertArray: alerts,
-		})
+		this.state.alertArray = alerts;
 
 		//this.fetchDailyData();
 	}
