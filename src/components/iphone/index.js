@@ -64,13 +64,12 @@ export default class Iphone extends Component {
 	render() {
 		// check if temperature data is fetched, if so add the sign styling to the page
 		const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
-		console.log(this.state.itemBool);
+		
 		// display all weather data
 		return (
 			<div class={ style.container }>
 				<div class={ style.header }>
 						<div class={ style.city }>{ this.state.locate }</div>
-						<div class={ style.conditions }>{ this.state.chancePrecip }</div>
 						<span class={ tempStyles }>{ this.state.temp }</span>
 				</div>
 				<div class={ style.details }></div>
@@ -78,10 +77,11 @@ export default class Iphone extends Component {
 					{ this.state.display ?
 						<div>
 							<div className={style.nav}>
-				          <input id="tripParameters" type="text" name="trip" value="Istanbul, 4/2 - 9/2"/>
-									<input type="image" name="search" src="https://d30y9cdsu7xlg0.cloudfront.net/png/15028-200.png"
+				          	<input id="tripParameters" type="text" name="trip" value="Istanbul, 4/2 - 9/2"/>
+							<input type="image" name="search" src="https://d30y9cdsu7xlg0.cloudfront.net/png/15028-200.png"
 									onClick={ this.fetchWeatherData } />
 							</div>
+
 							<TripSummary />
 							<DailyForecast />
 						</div> : null }
@@ -92,7 +92,6 @@ export default class Iphone extends Component {
 
 	fetchAlertData = (zip, magic, wmo) => {
 		var urlAlerts = "http://api.wunderground.com/api/9e7726cd8a6a3795/alerts/q/zmw:" + zip + "." + magic + "." + wmo + ".json";
-		console.log(urlAlerts);
 
 		$.ajax({
 			url: urlAlerts,
@@ -101,31 +100,38 @@ export default class Iphone extends Component {
 			error : function(req, err){ console.log('API call failed ' + err); }
 		});
 	}
-/*
-	fetchDailyData = () => {
-		var oneDay = 24*60*60*1000;
-		var departDate = this.state.tripArray[2];
-		var returnDate = this.state.tripArray[3];
-		var d = new Date(18, departDate.substring(0, 1), departDate.substring(2,3), 0, 0, 0, 0);
-		var r = new Date(18, returnDate.substring(0, 1), returnDate.substring(2,3), 0, 0, 0, 0);
-		var today = new Date();
-		var forecastDate = new Date();
-		forecastDate.setDate(forecastDate.getDate() + 10);
 
-		var finish =  Math.round((forecastDate.getTime() - r.getTime())/(oneDay));
-		var start =  Math.round((d.getTime() - today.getTime())/(oneDay));
+	convertTwoDigit = (val) => {
+		return (val < 10? '0' : '') + val;
+	}
 
-
-
-		var urlDaily = ""
-
+	dailyCall = (url) => {
 		$.ajax({
-			url: urlDaily,
+			url: url,
 			dataType: "jsonp",
 			success : this.parseDailyResponse,
 			error : function(req, err){ console.log('API call failed ' + err); }
 		});
-	}*/
+	}
+
+	fetchDailyData = () => {
+		var departDate = new Date(18, this.state.tripArray[2].substring(0, 2), this.state.tripArray[2].substring(2,4), 0, 0, 0, 0);
+		
+		var returnDate = new Date(18, this.state.tripArray[3].substring(0, 2), this.state.tripArray[3].substring(2,4), 0, 0, 0, 0);
+
+		
+
+		for ( var d = departDate; d <= returnDate; d.setDate(d.getDate() + 1)){
+			var month = this.convertTwoDigit(d.getMonth());
+			var day = this.convertTwoDigit(d.getDate());
+			var urlDaily = "http://api.wunderground.com/api/9e7726cd8a6a3795/history_2017" + month + day + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
+			this.dailyCall(urlDaily);
+		}
+		console.log(this.state.dayArray);
+
+	}
+
+	
 
 	parseResponse = (parsed_json) => {
 		var location = parsed_json['current_observation']['display_location']['full'];
@@ -146,6 +152,7 @@ export default class Iphone extends Component {
 		var chanceOfHot = parseInt(parsed_json['trip']['chance_of']['tempoverninety']['percentage']); //over 90
 		var chanceOverSixty = parseInt(parsed_json['trip']['chance_of']['tempoversixty']['percentage']);//over 60
 		
+		//Parsing through to determine which items will be suggested
 		if (chanceOfRain > 30 || chanceOfPrecip > 30){
 			this.state.itemBool['Umbrella'] = true;
 		}
@@ -205,6 +212,28 @@ export default class Iphone extends Component {
 
 		this.state.alertArray = alerts;
 
-		//this.fetchDailyData();
+		this.fetchDailyData();
+	}
+
+	parseDailyResponse = (parsed_json) => {
+		console.log(parsed_json);
+		var maxTemp = parseInt(parsed_json['history']['dailysummary']['0']['maxtempm']);
+		var minTemp = parseInt(parsed_json['history']['dailysummary']['0']['mintempm']);
+		var precip = parseFloat(parsed_json['history']['dailysummary']['0']['precipm']);
+
+		var cond = {};
+		for ( var i =0; i < parsed_json['history']['observations'].length; i+=10){
+			var condition = parsed_json['history']['observations'][i]['conds'];
+			cond[condition] = (cond[condition] || 0) + 1;
+		} //usually taking it from midnight to morning, afternoon, evening, and then night
+
+		var day = {
+			maxT: maxTemp,
+			minT: minTemp,
+			rainLvl: precip,
+			cond: cond,
+		}
+
+		this.state.dayArray.push(day);
 	}
 }
