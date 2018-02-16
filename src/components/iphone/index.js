@@ -39,7 +39,7 @@ export default class Iphone extends Component {
 			"Gloves/Scarf": false,
 		}; //dictionary of items, false if not suggested
 		// button display state
-		this.setState({ display: true });
+		this.setState({ displayTrip: false });
 	}
 
 	// a call to fetch weather data via wunderground
@@ -57,34 +57,48 @@ export default class Iphone extends Component {
 		})
 
 		// once the data grabbed, hide the button
-		this.setState({ display: false });
+		this.setState({ displayTrip: true });
 	}
 
 	// the main render method for the iphone component
 	render() {
 		// check if temperature data is fetched, if so add the sign styling to the page
+		//
 		const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
-		
+		let dayArray = this.state.dayArray;
+
 		// display all weather data
 		return (
 			<div class={ style.container }>
-				<div class={ style.header }>
+				 <div class={ style.header }>
 						<div class={ style.city }>{ this.state.locate }</div>
 						<span class={ tempStyles }>{ this.state.temp }</span>
 				</div>
-				<div class={ style.details }></div>
 				<div class= { style_iphone.container }>
-					{ this.state.display ?
-						<div>
-							<div className={style.nav}>
-				          	<input id="tripParameters" type="text" name="trip" value="Istanbul, 4/2 - 9/2"/>
-							<input type="image" name="search" src="https://d30y9cdsu7xlg0.cloudfront.net/png/15028-200.png"
-									onClick={ this.fetchWeatherData } />
-							</div>
+				<div>
+					{/* Search Bar */}
+					<div className={style.nav}>
+						<input id="tripParameters" type="text" name="trip" placeholder="Search for a city" value="London, England, 0222, 0224"/>
+						<input type="image" name="search" src="https://d30y9cdsu7xlg0.cloudfront.net/png/15028-200.png"
+						onClick={ this.fetchWeatherData } />
+					</div>
 
-							<TripSummary />
-							<DailyForecast />
-						</div> : null }
+					{/* USED FOR TESTING --- ignore
+					 <div>
+						<TripSummary high={this.state.tempHigh} low={this.state.tempLow}/>
+					  <DailyForecast dayArray={dayArray} />
+				  </div> */}
+
+				  { this.state.displayTrip ?
+							<div> <TripSummary high={this.state.tempHigh} low={this.state.tempLow}/>
+							<DailyForecast dayArray={this.state.dayArray} /> </div>:
+							<div className={style.landing}>
+								<img src="/assets/icons/sun.gif" id="sun" height="50"/> <br/>
+								Search for a city above to recieve personalized packing recommendations. <br/><br/><br/>
+								Prepare to feel prepared! <br/>
+								<img src="/assets/icons/relaxing.gif" height="200"/>
+							</div>  }
+				 </div>
 				</div>
 			</div>
 		);
@@ -127,11 +141,11 @@ export default class Iphone extends Component {
 			var urlDaily = "http://api.wunderground.com/api/9e7726cd8a6a3795/history_2017" + month + day + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
 			this.dailyCall(urlDaily);
 		}
-		console.log(this.state.dayArray);
+		console.log("dayArray",this.state.dayArray);
 
 	}
 
-	
+
 
 	parseResponse = (parsed_json) => {
 		var location = parsed_json['current_observation']['display_location']['full'];
@@ -206,7 +220,7 @@ export default class Iphone extends Component {
 		var alerts = [];
 		for ( var i =0; i < numAlerts; i++){
 			//grabbing name of alert and the color warning
-			var alertPair = [parsed_json['alerts'][i]['wtype_meteoalarm_name'], parsed_json['alerts'][i]['level_meteoalarm_name']]; 
+			var alertPair = [parsed_json['alerts'][i]['wtype_meteoalarm_name'], parsed_json['alerts'][i]['level_meteoalarm_name']];
 			alerts.push(alertPair);
 		}
 
@@ -216,7 +230,9 @@ export default class Iphone extends Component {
 	}
 
 	parseDailyResponse = (parsed_json) => {
-		console.log(parsed_json);
+		console.log("daily parsed json", parsed_json);
+		var month = parseInt(parsed_json['history']['dailysummary']['0']['date']['mon']);
+		var day = parseInt(parsed_json['history']['dailysummary']['0']['date']['mday']);
 		var maxTemp = parseInt(parsed_json['history']['dailysummary']['0']['maxtempm']);
 		var minTemp = parseInt(parsed_json['history']['dailysummary']['0']['mintempm']);
 		var precip = parseFloat(parsed_json['history']['dailysummary']['0']['precipm']);
@@ -228,6 +244,8 @@ export default class Iphone extends Component {
 		} //usually taking it from midnight to morning, afternoon, evening, and then night
 
 		var day = {
+			month: month,
+			day: day,
 			maxT: maxTemp,
 			minT: minTemp,
 			rainLvl: precip,
