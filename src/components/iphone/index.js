@@ -70,9 +70,14 @@ export default class Iphone extends Component {
 		// display all weather data
 		return (
 			<div class={ style.container }>
-				 <div class={ style.header }>
-						<div class={ style.city }>{ this.state.locate }</div>
-						<span class={ tempStyles }>{ this.state.temp }</span>
+				{ this.state.displayTrip ?
+					<div></div>
+					:
+					<img src="/assets/icons/relaxing.gif" id="relax"/>
+				}
+				<div class={ style.header }>
+					<div class={ style.city }>{ this.state.locate }</div>
+					<span class={ tempStyles }>{ this.state.temp }</span>
 				</div>
 				<div class= { style_iphone.container }>
 				<div>
@@ -90,14 +95,22 @@ export default class Iphone extends Component {
 				  </div> */}
 
 				  { this.state.displayTrip ?
-							<div> <TripSummary high={this.state.tempHigh} low={this.state.tempLow}/>
-							<DailyForecast dayArray={this.state.dayArray} /> </div>:
+						<div>
+							<TripSummary high={this.state.tempHigh} low={this.state.tempLow}/>
+							<DailyForecast dayArray={this.state.dayArray} />
+						</div>
+						:
+						<div class="landing">
+							<img src="/assets/icons/sun.gif" id="sun" height="50"/>
 							<div className={style.landing}>
-								<img src="/assets/icons/sun.gif" id="sun" height="50"/> <br/>
-								Search for a city above to recieve personalized packing recommendations. <br/><br/><br/>
-								Prepare to feel prepared! <br/>
-								<img src="/assets/icons/relaxing.gif" height="200"/>
-							</div>  }
+								<br/><br/><br/>
+								Search for a city above to receive personalized packing recommendations.
+								<br/><br/>
+								Prepare to feel prepared!
+								<br/>
+							</div>
+						</div>
+					}
 				 </div>
 				</div>
 			</div>
@@ -130,10 +143,10 @@ export default class Iphone extends Component {
 
 	fetchDailyData = () => {
 		var departDate = new Date(18, this.state.tripArray[2].substring(0, 2), this.state.tripArray[2].substring(2,4), 0, 0, 0, 0);
-		
+
 		var returnDate = new Date(18, this.state.tripArray[3].substring(0, 2), this.state.tripArray[3].substring(2,4), 0, 0, 0, 0);
 
-		
+
 
 		for ( var d = departDate; d <= returnDate; d.setDate(d.getDate() + 1)){
 			var month = this.convertTwoDigit(d.getMonth());
@@ -165,7 +178,7 @@ export default class Iphone extends Component {
 		var chanceOfFreezing = parseInt(parsed_json['trip']['chance_of']['tempbelowfreezing']['percentage']); //Below Freezing
 		var chanceOfHot = parseInt(parsed_json['trip']['chance_of']['tempoverninety']['percentage']); //over 90
 		var chanceOverSixty = parseInt(parsed_json['trip']['chance_of']['tempoversixty']['percentage']);//over 60
-		
+
 		//Parsing through to determine which items will be suggested
 		if (chanceOfRain > 30 || chanceOfPrecip > 30){
 			this.state.itemBool['Umbrella'] = true;
