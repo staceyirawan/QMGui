@@ -16,6 +16,7 @@ export default class DayForecast extends Component {
 
     return (
       <div className={style.day}>
+      	<i class={"wi wi-day-" + this.props.iconName}></i>
         &nbsp; {this.props.day}/{this.props.month}
         &nbsp; {/* todo: determine icon */}
         &nbsp; {this.props.high}&deg; / {this.props.low}&deg;

@@ -1,27 +1,21 @@
-// import preact
 import { h, render, Component } from 'preact';
-// import stylesheets for ipad & button
 import style from './style';
-// import jquery for API calls
 import $ from 'jquery';
-// import the Button component
 import Button from '../button';
 import style_iphone from '../button/style_iphone';
 import TripSummary from '../tripSummary';
 import DailyForecast from '../dailyForecast';
 
 export default class Iphone extends Component {
-//var Iphone = React.createClass({
 
-
-	// a constructor with initial set states
 	constructor(props){
 		super(props);
-		// temperature state
 		this.state.temp = "";
+		// DOESN'T RESET
 		this.state.tripArray = []; //stores input box value
 		this.state.dayArray = []; //stores info on daily forecast
 		this.state.alertArray = [];
+		this.state.summaryIcon = "na";
 		this.state.itemBool = {
 			"Winter Jacket": false,
 			"Fleece Jacket": false,
@@ -37,12 +31,10 @@ export default class Iphone extends Component {
 			"Umbrella": false,
 			"Snow Boots": false,
 			"Gloves/Scarf": false,
-		}; //dictionary of items, false if not suggested
-		// button display state
+		}; //false if not a suggested item
 		this.setState({ displayTrip: false });
 	}
 
-	// a call to fetch weather data via wunderground
 	fetchWeatherData = () => {
 		// API URL with a structure of : ttp://api.wunderground.com/api/key/feature/q/country-code/city.json
 		var tripString = ($("#tripParameters").val()?$("#tripParameters").val():alert('please fill the text field'));
@@ -56,18 +48,13 @@ export default class Iphone extends Component {
 			error : function(req, err){ console.log('API call failed ' + err); }
 		})
 
-		// once the data grabbed, hide the button
 		this.setState({ displayTrip: true });
 	}
 
-	// the main render method for the iphone component
 	render() {
-		// check if temperature data is fetched, if so add the sign styling to the page
-		//
 		const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
 		let dayArray = this.state.dayArray;
 
-		// display all weather data
 		return (
 			<div class={ style.container }>
 				{ this.state.displayTrip ?
@@ -75,19 +62,11 @@ export default class Iphone extends Component {
 					:
 					<img src="/assets/icons/relaxing.gif" id="relax"/>
 				}
-				{
-				// <div class={ style.header }>
-				// 	<div class={ style.city }>{ this.state.locate }</div>
-				// 	<span class={ tempStyles }>{ this.state.temp }</span>
-				// </div>
-				}
 				<div class= { style_iphone.container }>
 				<div>
-					{/* Search Bar */}
 					<div className={style.nav}>
-						{/* remove the value for the search bar when done */}
 						<input id="tripParameters" type="text" name="trip" placeholder="Search for a city" onKeyPress={this.searchEnter} />
-						<input type="image" name="search" src="https://d30y9cdsu7xlg0.cloudfront.net/png/15028-200.png"
+						<input type="image" name="search" src="../../assets/icons/search.png"
 						onClick={ this.fetchWeatherData } />
 					</div>
 
@@ -99,7 +78,7 @@ export default class Iphone extends Component {
 
 				  { this.state.displayTrip ?
 						<div>
-							<TripSummary high={this.state.tempHigh} low={this.state.tempLow}/>
+							<TripSummary high={this.state.tempHigh} low={this.state.tempLow} iconName={this.state.summaryIcon}/>
 							<DailyForecast dayArray={this.state.dayArray} />
 						</div>
 						:
@@ -152,10 +131,7 @@ export default class Iphone extends Component {
 
 	fetchDailyData = () => {
 		var departDate = new Date(18, this.state.tripArray[2].substring(0, 2), this.state.tripArray[2].substring(2,4), 0, 0, 0, 0);
-
 		var returnDate = new Date(18, this.state.tripArray[3].substring(0, 2), this.state.tripArray[3].substring(2,4), 0, 0, 0, 0);
-
-
 
 		for ( var d = departDate; d <= returnDate; d.setDate(d.getDate() + 1)){
 			var month = this.convertTwoDigit(d.getMonth());
@@ -164,7 +140,6 @@ export default class Iphone extends Component {
 			this.dailyCall(urlDaily);
 		}
 		console.log("dayArray",this.state.dayArray);
-
 	}
 
 
@@ -188,7 +163,6 @@ export default class Iphone extends Component {
 		var chanceOfHot = parseInt(parsed_json['trip']['chance_of']['tempoverninety']['percentage']); //over 90
 		var chanceOverSixty = parseInt(parsed_json['trip']['chance_of']['tempoversixty']['percentage']);//over 60
 
-		//Parsing through to determine which items will be suggested
 		if (chanceOfRain > 30 || chanceOfPrecip > 30){
 			this.state.itemBool['Umbrella'] = true;
 		}
@@ -247,7 +221,6 @@ export default class Iphone extends Component {
 		}
 
 		this.state.alertArray = alerts;
-
 		this.fetchDailyData();
 	}
 
@@ -257,11 +230,12 @@ export default class Iphone extends Component {
 		var day = parseInt(parsed_json['history']['dailysummary']['0']['date']['mday']);
 		var maxTemp = parseInt(parsed_json['history']['dailysummary']['0']['maxtempm']);
 		var minTemp = parseInt(parsed_json['history']['dailysummary']['0']['mintempm']);
-		var precip = parseFloat(parsed_json['history']['dailysummary']['0']['precipm']);
+		var precip = parseFloat(parsed_json['history']['dailysummary']['0']['precipm']) || 0;
+		var snowfall = parseFloat(parsed_json['history']['dailysummary']['0']['snowfallm']) || 0;
 
 		var cond = {};
 		for ( var i =0; i < parsed_json['history']['observations'].length; i+=10){
-			var condition = parsed_json['history']['observations'][i]['conds'];
+			var condition = parsed_json['history']['observations'][i]['icon'];
 			cond[condition] = (cond[condition] || 0) + 1;
 		} //usually taking it from midnight to morning, afternoon, evening, and then night
 
@@ -271,9 +245,58 @@ export default class Iphone extends Component {
 			maxT: maxTemp,
 			minT: minTemp,
 			rainLvl: precip,
+			snowLvl: snowfall,
 			cond: cond,
+			icon: this.getDailyIcon(cond, precip, snowfall),
 		}
 
 		this.state.dayArray.push(day);
+		this.getSummaryIcon();
+	}
+
+	getDailyIcon(cond, precip, snowfall) {
+		var clearCount = (cond['clear'] || 0) + (cond['partlysunny'] || 0) + (cond['mostlysunny'] || 0) + (cond['sunny'] || 0);
+		var cloudyCount = (cond['cloudy'] || 0) + (cond['partlycloudy'] || 0) + (cond['mostlycloudy'] || 0);
+		var snowCount = (cond['flurries'] || 0) + (cond['snow'] || 0);
+		var sleetCount = (cond['sleet'] || 0);
+		var rainCount = (cond['rain'] || 0);
+		var thunderCount = (cond['tstorms'] || 0);
+		var fogCount = (cond['fog'] || 0) + (cond['hazy'] || 0);
+		var naCount = (cond[''] || 0) + (cond['unknown'] || 0);
+
+		if(snowCount >= 1 && snowfall > 0)
+			return 'snow';
+		if(sleetCount >= 1)
+			return 'sleet';
+		if(thunderCount >= 1 && precip > 0)
+			return 'thunderstorm';
+		if(rainCount >= 1 && precip > 0)
+			return 'showers';
+		if(fogCount >= 1)
+			return 'fog';
+		if(cloudyCount >= 1 && cloudyCount >= clearCount)
+			return 'cloudy';
+		if(clearCount >= 1 && clearCount >= cloudyCount)
+			return 'sunny';
+		return 'na';
+	}
+
+	getSummaryIcon() {
+		var dayArray = this.state.dayArray;
+		var maxCount = -1;
+		var maxIcon = "na";
+		var iconCounts = {};
+
+		for(var i = 0; i < dayArray.length; i++) {
+			var dayIcon = dayArray[i]["icon"];
+			iconCounts[dayIcon] = (iconCounts[dayIcon] || 0) + 1;
+
+			if(iconCounts[dayIcon] > maxCount) {
+				maxCount = iconCounts[dayIcon];
+				maxIcon = dayIcon;
+			}
+		}
+
+		this.setState({summaryIcon : maxIcon});
 	}
 }

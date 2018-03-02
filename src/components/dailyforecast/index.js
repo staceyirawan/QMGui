@@ -34,7 +34,7 @@ export default class DailyForecast extends Component {
 		for (var i=0; i< dayArray.length; i++){
 			let d = dayArray[i];
 			days.push(
-				<DayForecast month={d.month} day={d.day} high={d.maxT} low={d.minT} rainLvl={d.rainLvl} />
+				<DayForecast month={d.month} day={d.day} high={d.maxT} low={d.minT} rainLvl={d.rainLvl} iconName={d.icon} />
 			);
 		}
 
