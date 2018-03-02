@@ -137,7 +137,6 @@ export default class Iphone extends Component {
 			var urlDaily = "http://api.wunderground.com/api/9e7726cd8a6a3795/history_2017" + month + day + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
 			this.dailyCall(urlDaily);
 		}
-		console.log("dayArray",this.state.dayArray);
 	}
 
 
@@ -223,7 +222,6 @@ export default class Iphone extends Component {
 	}
 
 	parseDailyResponse = (parsed_json) => {
-		console.log("daily parsed json", parsed_json);
 		var month = parseInt(parsed_json['history']['dailysummary']['0']['date']['mon']);
 		var day = parseInt(parsed_json['history']['dailysummary']['0']['date']['mday']);
 		var maxTemp = parseInt(parsed_json['history']['dailysummary']['0']['maxtempm']);
@@ -249,6 +247,23 @@ export default class Iphone extends Component {
 		}
 
 		this.state.dayArray.push(day);
+		this.state.dayArray.sort(function compare(a, b) {
+			if (parseInt(a.month) < parseInt(b.month)){
+				
+				return -1;
+			} else if (parseInt(a.month) > parseInt(b.month)){
+				console.log("b");
+				return 1;
+			} else {
+				if ( parseInt(a.day) > parseInt(b.day) ){
+					console.log(a.day);
+					console.log(b.day);
+					return 1;
+				}
+			}
+			return 0;
+		});
+		console.log(this.state.dayArray);
 		this.getSummaryIcon();
 	}
 
