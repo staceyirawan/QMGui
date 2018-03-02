@@ -38,7 +38,6 @@ export default class Iphone extends Component {
 	formatDate = (dates) => {
 		var date = dates.replace(/\//g, '').replace("/ /g", '').replace("-", '');
 		this.state.tripArray[2] = date.substring(0, 4);
-		console.log(this.state.tripArray[2]);
 		this.state.tripArray[3] = date.substring(4, 8);
 	}
 
@@ -51,7 +50,6 @@ export default class Iphone extends Component {
 		this.state.tripArray = tripString.split(", "); //City, Country or State, Depart, Return
 		this.formatDate(this.state.tripArray[2]);
 		
-		//console.log(this.state.tripArray[3]);
 		var url = "http://api.wunderground.com/api/9e7726cd8a6a3795/conditions/" + "planner_" + this.state.tripArray[2] + this.state.tripArray[3] + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
 
 		$.ajax({
@@ -211,8 +209,6 @@ export default class Iphone extends Component {
 			chanceFreeze: chanceOfFreezing,
 			chanceHot: chanceOfHot,
 		});
-
-		console.log(parsed_json);
 		this.fetchAlertData(zip, magic, wmo);
 	}
 
