@@ -11,7 +11,7 @@ export default class Iphone extends Component {
 	constructor(props){
 		super(props);
 		this.state.temp = "";
-		// DOESN'T RESET
+		
 		this.state.tripArray = []; //stores input box value
 		this.state.dayArray = []; //stores info on daily forecast
 		this.state.alertArray = [];
@@ -35,6 +35,13 @@ export default class Iphone extends Component {
 		this.setState({ displayTrip: false });
 	}
 
+	formatDate = (dates) => {
+		var date = dates.replace(/\//g, '').replace("/ /g", '').replace("-", '');
+		this.state.tripArray[2] = date.substring(0, 4);
+		console.log(this.state.tripArray[2]);
+		this.state.tripArray[3] = date.substring(4, 8);
+	}
+
 	fetchWeatherData = () => {
 		this.state.dayArray.length = 0;
 		this.state.alertArray.length = 0;
@@ -42,6 +49,9 @@ export default class Iphone extends Component {
 		// API URL with a structure of : ttp://api.wunderground.com/api/key/feature/q/country-code/city.json
 		var tripString = ($("#tripParameters").val()?$("#tripParameters").val():alert('please fill the text field'));
 		this.state.tripArray = tripString.split(", "); //City, Country or State, Depart, Return
+		this.formatDate(this.state.tripArray[2]);
+		
+		//console.log(this.state.tripArray[3]);
 		var url = "http://api.wunderground.com/api/9e7726cd8a6a3795/conditions/" + "planner_" + this.state.tripArray[2] + this.state.tripArray[3] + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
 
 		$.ajax({
@@ -139,8 +149,6 @@ export default class Iphone extends Component {
 		}
 	}
 
-
-
 	parseResponse = (parsed_json) => {
 		var location = parsed_json['current_observation']['display_location']['full'];
 		var zip = parsed_json['current_observation']['display_location']['zip'];
@@ -204,6 +212,7 @@ export default class Iphone extends Component {
 			chanceHot: chanceOfHot,
 		});
 
+		console.log(parsed_json);
 		this.fetchAlertData(zip, magic, wmo);
 	}
 
@@ -249,21 +258,17 @@ export default class Iphone extends Component {
 		this.state.dayArray.push(day);
 		this.state.dayArray.sort(function compare(a, b) {
 			if (parseInt(a.month) < parseInt(b.month)){
-				
 				return -1;
 			} else if (parseInt(a.month) > parseInt(b.month)){
-				console.log("b");
 				return 1;
 			} else {
 				if ( parseInt(a.day) > parseInt(b.day) ){
-					console.log(a.day);
-					console.log(b.day);
 					return 1;
 				}
 			}
 			return 0;
 		});
-		console.log(this.state.dayArray);
+		
 		this.getSummaryIcon();
 	}
 
