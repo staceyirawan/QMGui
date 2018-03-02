@@ -38,7 +38,7 @@ export default class Iphone extends Component {
 	fetchWeatherData = () => {
 		this.state.dayArray.length = 0;
 		this.state.alertArray.length = 0;
-
+		this.state.tripArray.length = 0;
 		// API URL with a structure of : ttp://api.wunderground.com/api/key/feature/q/country-code/city.json
 		var tripString = ($("#tripParameters").val()?$("#tripParameters").val():alert('please fill the text field'));
 		this.state.tripArray = tripString.split(", "); //City, Country or State, Depart, Return
