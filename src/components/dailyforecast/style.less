@@ -12,11 +12,12 @@ div.bar {
 }
 
 div.dailyText{
-  padding-top:4px;
+  padding-top: 2px;
   font-weight: 500;
+  font-size: 18px;
 }
 
-button.downCaret{
+button.caretButton{
   margin-right: 10px;
   margin-bottom: 2px;
 	font-size: 20px;
@@ -29,12 +30,20 @@ button.downCaret{
 	//transition: all 0.3s ease-in-out;
 }
 
+.caret {
+
+}
+
+.caretflip {
+	transform: rotate(180deg);
+}
 
 div.dayBox{
   background-color: @nearblack;
   border-radius:5px;
-  width:95%;
+  width: 97%;
   margin: 0 auto;
+  margin-top: 15px;
 }
 
 div.whiteBox{
@@ -43,4 +52,6 @@ div.whiteBox{
   width: 85%;
   margin: 0 auto;
   padding:5px;
+  margin-top: -15px;
+  padding-bottom: 10px;
 }

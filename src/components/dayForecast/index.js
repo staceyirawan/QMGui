@@ -7,20 +7,52 @@ export default class DayForecast extends Component {
   }
 
   render(){
-    let precipitation = null;
-    if (this.props.rainLvl > 0){
-      precipitation = this.props.rainLvl + " in/cm rain";
-    } else {
-      //todo: find the largest cond and print out if no rain
-    }
+    let description = null;
+		let iconName = this.props.iconName;
+		let precip = false;
+
+		switch(iconName) {
+			case "snow":
+				precip = true;
+				description = this.props.snowLvl + " mm snow";
+				break;
+			case "sleet":
+				precip = true;
+				description = "sleet";
+				break;
+			case "thunderstorm":
+			case "showers":
+				precip = true;
+				description = this.props.rainLvl + " mm rain";
+				break;
+			case "fog":
+				description = "foggy";
+				break;
+			case "cloudy":
+				description = "cloudy";
+				break;
+			case "sunny":
+				description = "sunny";
+				break;
+			case "na":
+				description = "conditions n/a"
+				break;
+		}
 
     return (
       <div className={style.day}>
-      	<i class={"wi wi-day-" + this.props.iconName}></i>
         &nbsp; {this.props.day}/{this.props.month}
+				{
+				/* Not sure how to nest classes in less, current solution is use icon vs span*/
+				precip ?
+        <i class={"wi wi-day-" + this.props.iconName}></i>
+				:
+				<span class={"wi wi-day-" + this.props.iconName}></span>
+				}
+
         &nbsp; {/* todo: determine icon */}
         &nbsp; {this.props.high}&deg; / {this.props.low}&deg;
-        &nbsp; {precipitation}
+        &nbsp; {description}
       </div>
     )
   }

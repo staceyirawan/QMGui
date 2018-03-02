@@ -14,11 +14,9 @@ export default class TripSummary extends Component {
 		let iconName = this.props.iconName;
 
 		return (
-			//todo: icon
 			<div className={style.wrapper}>
-				<div className={style.icon}>
+				<div className={style.summaryIcon}>
 					<i class={"wi wi-day-"+iconName}></i>
-					<img src="http://icons.iconarchive.com/icons/icons8/ios7/256/Weather-Rain-icon.png" height="100"/>
 				</div>
 
 				{/* hi low temperatures - use something besides a table? */}

@@ -42,9 +42,9 @@ export default class DailyForecast extends Component {
 			<div>
 				<div className={style.bar}>
 				<div className={style.dailyText}>Daily weather forecast</div>
-				<button className={style.downCaret} onClick={this.toggleShow}>
-					{!showDropdown && <img src="https://image.flaticon.com/icons/svg/60/60781.svg" height="10"/>}
-					{showDropdown && <img src="http://images.qurancomplex.gov.sa/publications/documentation37/Publications3/1437_New_Contract/Free_Icons/clear-icons/png/caret7.png" height="5"/> }
+				<button className={style.caretButton} onClick={this.toggleShow}>
+					{!showDropdown && <img className={style.caret} src="../../assets/icons/caret.svg" height="10"/>}
+					{showDropdown && <img className={style.caretflip} src="../../assets/icons/caret.svg" height="10"/> }
 				</button>
 			</div>
 				{showDropdown &&
