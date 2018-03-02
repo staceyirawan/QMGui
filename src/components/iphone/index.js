@@ -75,15 +75,18 @@ export default class Iphone extends Component {
 					:
 					<img src="/assets/icons/relaxing.gif" id="relax"/>
 				}
-				<div class={ style.header }>
-					<div class={ style.city }>{ this.state.locate }</div>
-					<span class={ tempStyles }>{ this.state.temp }</span>
-				</div>
+				{
+				// <div class={ style.header }>
+				// 	<div class={ style.city }>{ this.state.locate }</div>
+				// 	<span class={ tempStyles }>{ this.state.temp }</span>
+				// </div>
+				}
 				<div class= { style_iphone.container }>
 				<div>
 					{/* Search Bar */}
 					<div className={style.nav}>
-						<input id="tripParameters" type="text" name="trip" placeholder="Search for a city" value="London, England, 0222, 0224"/>
+						{/* remove the value for the search bar when done */}
+						<input id="tripParameters" type="text" name="trip" placeholder="Search for a city" onKeyPress={this.searchEnter} />
 						<input type="image" name="search" src="https://d30y9cdsu7xlg0.cloudfront.net/png/15028-200.png"
 						onClick={ this.fetchWeatherData } />
 					</div>
@@ -115,6 +118,12 @@ export default class Iphone extends Component {
 				</div>
 			</div>
 		);
+	}
+
+	searchEnter = (e) => {
+		if(e.key === 'Enter') {
+			this.fetchWeatherData();
+		}
 	}
 
 	fetchAlertData = (zip, magic, wmo) => {
