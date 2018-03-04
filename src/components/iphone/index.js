@@ -3,15 +3,16 @@ import style from './style';
 import $ from 'jquery';
 import Button from '../button';
 import style_iphone from '../button/style_iphone';
-import TripSummary from '../tripSummary';
-import DailyForecast from '../dailyForecast';
+import TripSummary from '../tripsummary';
+import DailyForecast from '../dailyforecast';
+import CheckList from '../checklist';
 
 export default class Iphone extends Component {
 
 	constructor(props){
 		super(props);
 		this.state.temp = "";
-		
+
 		this.state.tripArray = []; //stores input box value
 		this.state.dayArray = []; //stores info on daily forecast
 		this.state.alertArray = [];
@@ -49,7 +50,7 @@ export default class Iphone extends Component {
 		var tripString = ($("#tripParameters").val()?$("#tripParameters").val():alert('please fill the text field'));
 		this.state.tripArray = tripString.split(", "); //City, Country or State, Depart, Return
 		this.formatDate(this.state.tripArray[2]);
-		
+
 		var url = "http://api.wunderground.com/api/9e7726cd8a6a3795/conditions/" + "planner_" + this.state.tripArray[2] + this.state.tripArray[3] + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
 
 		$.ajax({
@@ -85,7 +86,7 @@ export default class Iphone extends Component {
 				  { this.state.displayTrip ?
 						<div>
 							<TripSummary high={this.state.tempHigh} low={this.state.tempLow} iconName={this.state.summaryIcon}/>
-							<DailyForecast dayArray={this.state.dayArray} />
+							<DailyForecast dayArray={this.state.dayArray} items={this.state.itemBool}/>
 						</div>
 						:
 						<div class="landing">
@@ -264,7 +265,7 @@ export default class Iphone extends Component {
 			}
 			return 0;
 		});
-		
+
 		this.getSummaryIcon();
 	}
 

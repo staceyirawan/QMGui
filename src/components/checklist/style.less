@@ -1,0 +1,55 @@
+
+
+div.form {
+
+	background: #FFF;
+	padding: 10px;
+	border-bottom: 1px solid #EEE;
+	width: 200px;
+
+	div.input {
+
+		box-sizing: border-box;
+		width: 175px;
+		padding: 10px;
+		background: #JJJ;
+		border: 1px solid #DDD;
+		border-radius: 5px;
+		font-size: 30px;
+		outline: none;
+
+		&:focus {
+			border-color: #BBB;
+		}
+	}
+}
+
+div.button {
+
+	height: 15px;
+	width: 15px;
+	font-size: 20px;
+
+}
+
+ul {
+	min-height: 100px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		padding: 10px;
+		background: #BBB;
+		border-bottom: 1px solid #EEE;
+
+		&:nth-child(2n) {
+			background: #BBB;
+		}
+		&:last-child {
+			border-bottom: none;
+		}
+
+
+	}
+}
