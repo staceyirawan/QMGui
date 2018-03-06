@@ -2,16 +2,17 @@
 import { h, render, Component } from 'preact';
 import style from './style';
 import DayForecast from '../dayForecast';
-import CheckList from '../checklist';
 
 export default class DailyForecast extends Component {
 	constructor(props){
 		super(props);
 
 		this.state = {
-			showDropdown: false
+			showDropdown: false,
+			text: ""
 		}
 
+		this.addItem = this.addItem.bind(this);
 		this.toggleShow = this.toggleShow.bind(this);
 		this.hide = this.hide.bind(this);
 	}
@@ -27,7 +28,31 @@ export default class DailyForecast extends Component {
 		this.setState({showDropdown: false});
 	}
 
-	render() {
+	addItem(e) {
+		let newItem = this.state.text.value;
+		this.props.items[newItem] = true;
+		this.setState();
+	}
+
+	toggle(e) {
+    let checked = !this.state.checked;
+    this.setState({ checked });
+  }
+
+	image(jpg) {
+		if (jpg == "Winter Jacket"||"Down Jacket"||"Windbreaker"||"Long Underwear"
+		||"T-shirts"||"Long-sleeved shirt"||"Sweater"||"Shorts"||"Pants"
+		||"Sunglasses"||"Umbrella"||"Snow Boots"||"Gloves"||"Scarf") {
+			let itemP = jpg.toLowerCase();
+			let itemPi = itemP.replace(" ", "-");
+			let itemPic = "../assets/icons/" + itemPi + ".png";
+			return itemPic;
+		} else {
+			return "../assets/icons/unknown-item.png";
+		}
+	}
+
+	render({}, {checked}) {
 		let showDropdown = this.state.showDropdown;
 		let dayArray = this.props.dayArray;
 		let items = this.props.items;
@@ -49,6 +74,29 @@ export default class DailyForecast extends Component {
 
 		return (
 			<div>
+			<div>
+			Suggested items to bring:
+			</div>
+					<div>
+				    <ul>
+				      {bring.map(i => <li key={i}>
+								<img className={style.image} src={this.image(i)} />
+								 {i}
+								<label>
+			              <input
+			                  type="checkbox"
+			                  checked={checked}
+			                  onClick={this.toggle} />
+			          </label>
+								</li> )}
+				    </ul>
+						<form className={style.formItem}>
+						    <input /*onChange={this.onChange}*/
+								 type="text" placeholder="New item..." ref={(txt) => this.state.text = txt} /*value={this.state.text}*/ />
+						</form>
+						<button type="text" onClick={this.addItem}>Add item</button>
+
+					</div>
 				<div className={style.bar}>
 				<div className={style.dailyText}>Daily weather forecast</div>
 				<button className={style.caretButton} onClick={this.toggleShow}>
@@ -56,10 +104,8 @@ export default class DailyForecast extends Component {
 					{showDropdown && <img className={style.caretflip} src="../../assets/icons/caret.svg" height="10"/> }
 				</button>
 			</div>
-			<div>
-			Suggested items to bring:
-			</div>
-			<CheckList sugItems={bring}/>
+
+
 				{showDropdown &&
 					//todo: fix the white padding that occurs when content is not loaded?
 					//todo: fix gap underneath nav and dropdown

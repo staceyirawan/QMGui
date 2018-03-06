@@ -5,7 +5,6 @@ import Button from '../button';
 import style_iphone from '../button/style_iphone';
 import TripSummary from '../tripsummary';
 import DailyForecast from '../dailyforecast';
-import CheckList from '../checklist';
 
 export default class Iphone extends Component {
 
@@ -19,19 +18,19 @@ export default class Iphone extends Component {
 		this.state.summaryIcon = "na";
 		this.state.itemBool = {
 			"Winter Jacket": false,
-			"Fleece Jacket": false,
+			"Down Jacket": false,
 			"Windbreaker": false,
 			"Long Underwear": false,
 			"T-shirts": false,
-			"Long Sleeves": false,
-			"Light Sweater/Hoodie": false,
-			"Heavy Sweater": false,
+			"Long-sleeved shirt": false,
+			"Sweater": false,
 			"Shorts": false,
 			"Pants": false,
 			"Sunglasses": false,
 			"Umbrella": false,
 			"Snow Boots": false,
-			"Gloves/Scarf": false,
+			"Gloves": false,
+			"Scarf": false,
 		}; //false if not a suggested item
 		this.setState({ displayTrip: false });
 	}
@@ -187,14 +186,15 @@ export default class Iphone extends Component {
 		if (chanceOfFreezing > 30){ //Below Freezing
 			this.state.itemBool['Winter Jacket'] = true;
 			this.state.itemBool['Long Underwear'] = true;
-			this.state.itemBool['Gloves/Scarf'] = true;
+			this.state.itemBool['Gloves'] = true;
+			this.state.itemBool['Scarf'] = true;
 		}
 		if (chanceOverSixty > 30){
-			this.state.itemBool['Light Sweater/Hoodie'] = true;
+			this.state.itemBool['Long-sleeved Shirt'] = true;
 		}
 		if (chanceOverFreezing > 30){
-			this.state.itemBool['Fleece Jacket'] = true;
-			this.state.itemBool['Heavy Sweater'] = true;
+			this.state.itemBool['Down Jacket'] = true;
+			this.state.itemBool['Sweater'] = true;
 		}
 
 		// set states for fields so they could be rendered later on

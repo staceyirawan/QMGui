@@ -56,9 +56,63 @@ div.whiteBox{
   padding-bottom: 10px;
 }
 
-div.CheckList {
-  background-color: #fff;
-  border-radius:5px;
-  width:95%;
-  margin: 0 auto;
+
+
+div.formInput {
+
+	background: #FFF;
+	padding: 5px;
+	border-bottom: 1px solid #EEE;
+	width: 200px;
+
+	div.inputItem {
+
+		box-sizing: border-box;
+		width: 175px;
+		padding: 10px;
+		background: #JJJ;
+		border: 1px solid #DDD;
+		border-radius: 5px;
+		font-size: 20px;
+		outline: none;
+
+		&:focus {
+			border-color: #BBB;
+		}
+	}
 }
+
+ul {
+	min-height: 50px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		padding: 5px;
+		background: #BBB;
+		border-bottom: 1px solid #EEE;
+
+		&:nth-child(2n) {
+			background: #BBB;
+		}
+		&:last-child {
+			border-bottom: none;
+		}
+
+
+	}
+}
+
+img.image {
+  height: 20px;
+  width: 20px;
+}
+
+
+// div.CheckList {
+//   background-color: #fff;
+//   border-radius:5px;
+//   width:95%;
+//   margin: 0 auto;
+// }
