@@ -10,7 +10,7 @@ export default class DailyForecast extends Component {
 		this.state = {
 			showDropdown: false,
 			text: ""
-		}
+		};
 
 		this.addItem = this.addItem.bind(this);
 		this.toggleShow = this.toggleShow.bind(this);
@@ -74,47 +74,43 @@ export default class DailyForecast extends Component {
 
 		return (
 			<div>
-			<div>
-			Suggested items to bring:
-			</div>
-					<div>
-				    <ul>
-				      {bring.map(i => <li key={i}>
-								<img className={style.image} src={this.image(i)} />
-								 {i}
-								<label>
-			              <input
-			                  type="checkbox"
-			                  checked={checked}
-			                  onClick={this.toggle} />
-			          </label>
-								</li> )}
-				    </ul>
-						<form className={style.formItem}>
-						    <input /*onChange={this.onChange}*/
-								 type="text" placeholder="New item..." ref={(txt) => this.state.text = txt} /*value={this.state.text}*/ />
-						</form>
-						<button type="text" onClick={this.addItem}>Add item</button>
-
+				<div className={style.dailyWeather}>
+					<div className={style.bar}>
+						<div className={style.dailyText}>Daily weather forecast</div>
+						<button className={style.caretButton} onClick={this.toggleShow}>
+							{!showDropdown && <img className={style.caret} src="../../assets/icons/caret.svg" height="10"/>}
+							{showDropdown && <img className={style.caretflip} src="../../assets/icons/caret.svg" height="10"/> }
+						</button>
 					</div>
-				<div className={style.bar}>
-				<div className={style.dailyText}>Daily weather forecast</div>
-				<button className={style.caretButton} onClick={this.toggleShow}>
-					{!showDropdown && <img className={style.caret} src="../../assets/icons/caret.svg" height="10"/>}
-					{showDropdown && <img className={style.caretflip} src="../../assets/icons/caret.svg" height="10"/> }
-				</button>
-			</div>
-
-
-				{showDropdown &&
-					//todo: fix the white padding that occurs when content is not loaded?
-					//todo: fix gap underneath nav and dropdown
-					(<div className={style.whiteBox}>
-						<div className={style.dayBox}>
-							{days}
+					{showDropdown &&
+						(<div className={style.whiteBox}>
+							<div className={style.dayBox}>
+								{days}
+							</div>
 						</div>
-					</div>
-			)}
+					)}
+				</div>
+
+				<div>
+			    <ul>
+			      {bring.map(i => <li key={i}>
+							<img className={style.image} src={this.image(i)} />
+							 {i}
+							<label>
+		              <input
+		                  type="checkbox"
+		                  checked={checked}
+		                  onClick={this.toggle} />
+		          </label>
+							</li> )}
+			    </ul>
+					<form className={style.formItem}>
+					    <input /*onChange={this.onChange}*/
+							 type="text" placeholder="New item..." ref={(txt) => this.state.text = txt} /*value={this.state.text}*/ />
+					</form>
+					<button type="text" onClick={this.addItem}>Add item</button>
+
+				</div>
 			</div>
 		);
 	}
