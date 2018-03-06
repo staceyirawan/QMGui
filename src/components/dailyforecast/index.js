@@ -91,18 +91,18 @@ export default class DailyForecast extends Component {
 					)}
 				</div>
 
-				<div>
+				<img className={style.luggageHandle} src="../../assets/icons/luggage-handle.png"/>
+				<div className={style.luggage}>
 			    <ul>
-			      {bring.map(i => <li key={i}>
-							<img className={style.image} src={this.image(i)} />
-							 {i}
-							<label>
-		              <input
-		                  type="checkbox"
-		                  checked={checked}
-		                  onClick={this.toggle} />
-		          </label>
-							</li> )}
+			      {bring.map(i =>
+			      	<li className={style.suggestedItem} key={i}>
+								<img className={style.image} src={this.image(i)} />
+							 	{i}
+								<label>
+		            	  <input type="checkbox" checked={checked} onClick={this.toggle} />
+			          </label>
+							</li>)
+			      }
 			    </ul>
 					<form className={style.formItem}>
 					    <input /*onChange={this.onChange}*/
@@ -111,6 +111,8 @@ export default class DailyForecast extends Component {
 					<button type="text" onClick={this.addItem}>Add item</button>
 
 				</div>
+				<img className={style.luggageWheel1} src="../../assets/icons/luggage-wheel.png"/>
+				<img className={style.luggageWheel2} src="../../assets/icons/luggage-wheel.png"/>
 			</div>
 		);
 	}
