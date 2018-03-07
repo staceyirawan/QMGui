@@ -72,6 +72,12 @@ export default class DailyForecast extends Component {
 		}
 	}
 
+	searchEnter(e) {
+		if(e.key === 'Enter') {
+			return this.addItem;
+		}
+	}
+
 	render({}) {
 		let showDropdown = this.state.showDropdown;
 		let dayArray = this.props.dayArray;
@@ -119,7 +125,7 @@ export default class DailyForecast extends Component {
 								{ this.image(i) !== -1 ?
 									<img className={style.packingIcon} src={this.image(i)} />
 									:
-									<img className={style.packingIcon} src="../assets/icons/sweater.png" />
+									<div></div>
 								}
 								<span className={this.image(i) !== -1 ? style.packingLabel : style.noImageLabel}>{i}</span>
 								<div className={style.checkContainer}>
@@ -129,12 +135,8 @@ export default class DailyForecast extends Component {
 							</li>)
 			      }
 			    </ul>
-					<form className={style.formItem}>
-					    <input /*onChange={this.onChange}*/
-							 type="text" placeholder="New item..." ref={(txt) => this.state.text = txt} /*value={this.state.text}*/ />
-					</form>
-					<button type="text" onClick={this.addItem}>Add item</button>
-
+			    <input className={style.itemInput} type="text" placeholder="New item..." value="" ref={(txt) => this.state.text = txt} onKeyPress={() => {this.searchEnter}}/>
+					<input className={style.addItem} type="image" name="add" src="../../assets/icons/add.png" onClick={this.addItem}/>
 				</div>
 				<img className={style.luggageWheel1} src="../../assets/icons/luggage-wheel.png"/>
 				<img className={style.luggageWheel2} src="../../assets/icons/luggage-wheel.png"/>
