@@ -52,11 +52,12 @@ div.dayBox{
 
 div.whiteBox{
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
   width: 85%;
   margin: 0 auto;
   padding:5px;
-  margin-top: -15px;
+  padding-top: 10px;
+  margin-top: -20px;
   padding-bottom: 10px;
 }
 
@@ -115,8 +116,23 @@ img.packingIcon {
 }
 
 span.packingLabel {
-	display: inline-block;
-	margin-top: 10px;
+	font-weight: bold;
+	position: absolute;
+	bottom: 5px;
+	left: 50%;
+	transform: translate(-50%);
+	white-space: nowrap;
+	width: 90%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+span.noImageLabel {
+	font-size: 25px;
+	position: absolute;
+	right: 50%;
+	top: 50%;
+	transform: translate(50%, -50%);
 	font-weight: bold;
 }
 
@@ -125,7 +141,7 @@ div.luggage {
 	width: 85%;
 	margin-left: 7.5%;
 	padding-right: 4.25%;
-	padding-top: 4.25%;
+	padding-top: 5%;
 	padding-bottom: 4.25%;
 	border-radius: 20px;
 }
@@ -134,7 +150,7 @@ li.suggestedItem {
 	display: inline-block;
 	width: 42.5%;
 	margin-left: 5%;
-	margin-bottom: 5%;
+	margin-bottom: 3%;
 	border-radius: 10px;
 	height: 135px;
 	position: relative;

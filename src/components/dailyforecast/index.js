@@ -36,21 +36,35 @@ export default class DailyForecast extends Component {
 	}
 
 	image(jpg) {
-		if (jpg === "Winter Jacket"||"Down Jacket"||"Windbreaker"||"Long Underwear"
-		||"T-shirts"||"Long-sleeved shirt"||"Sweater"||"Shorts"||"Pants"
-		||"Sunglasses"||"Umbrella"||"Snow Boots"||"Gloves"||"Scarf") {
-			let itemP = jpg.toLowerCase();
-			let itemPi = itemP.replace(" ", "-");
-			let itemPic = "../assets/icons/" + itemPi + ".png";
-			return itemPic;
+		let icons = [
+			"winter-jacket",
+			"down-jacket",
+			"windbreaker",
+			"long-underwear",
+			"t-shirt",
+			"long-sleeved-shirt",
+			"sweater",
+			"shorts",
+			"pants",
+			"sunglasses",
+			"umbrella",
+			"snow-boots",
+			"gloves",
+			"scarf"];
+
+		let itemName = jpg.toLowerCase().replace(" ", "-");
+
+		if (icons.indexOf(itemName) !== -1) {
+			let itemUrl  = "../assets/icons/" + itemName + ".png";
+			return itemUrl;
 		}
 
-		return "../assets/icons/unknown-item.png";
+		return -1;
 	}
 
 	greyOut(i) {
 		return () => {
-			let id = i.split(" ")[0]
+			let id = i.replace(/ /g, "-");
 			if ($("#"+id).is(':checked'))
 				$("#"+id).parent().parent().css("background-color", "#D8DDDD");
 			else
@@ -102,11 +116,15 @@ export default class DailyForecast extends Component {
 			    <ul>
 			      {bring.map(i =>
 							<li className={style.suggestedItem} key={i}>
-								<img className={style.packingIcon} src={this.image(i)} />
-								<span className={style.packingLabel}>{i}</span>
+								{ this.image(i) !== -1 ?
+									<img className={style.packingIcon} src={this.image(i)} />
+									:
+									<img className={style.packingIcon} src="../assets/icons/sweater.png" />
+								}
+								<span className={this.image(i) !== -1 ? style.packingLabel : style.noImageLabel}>{i}</span>
 								<div className={style.checkContainer}>
-									<input id={i.split(" ")[0]} type="checkbox" className={style.check} onClick={this.greyOut(i)}/>
-									<label className={style.checkBox} for={i.split(" ")[0]}></label>
+									<input id={i.replace(/ /g, "-")} type="checkbox" className={style.check} onClick={this.greyOut(i)}/>
+									<label className={style.checkBox} for={i.replace(/ /g, "-")}></label>
 								</div>
 							</li>)
 			      }

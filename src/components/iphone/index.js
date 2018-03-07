@@ -21,8 +21,8 @@ export default class Iphone extends Component {
 			"Down Jacket": false,
 			"Windbreaker": false,
 			"Long Underwear": false,
-			"T-shirts": false,
-			"Long-sleeved shirt": false,
+			"T-shirt": false,
+			"Long-sleeved Shirt": false,
 			"Sweater": false,
 			"Shorts": false,
 			"Pants": false,
@@ -185,7 +185,7 @@ export default class Iphone extends Component {
 			this.state.itemBool['Winter Jacket'] = true;
 		}
 		if (chanceOfHot > 30){
-			this.state.itemBool['T-shirts'] = true;
+			this.state.itemBool['T-shirt'] = true;
 			this.state.itemBool['Shorts'] = true;
 			this.state.itemBool['Sunglasses'] = true;
 		}
