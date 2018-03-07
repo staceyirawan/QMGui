@@ -5,11 +5,24 @@ import Button from '../button';
 import style_iphone from '../button/style_iphone';
 import TripSummary from '../tripsummary';
 import DailyForecast from '../dailyforecast';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default class Iphone extends Component {
 
 	constructor(props){
-		super(props);
+		super(props)
+		this.state = {
+      	startDate:"",
+      	endDate:""
+    	};
+    	this.handleEndChange = this.handleEndChange.bind(this);
+    	this.handleChange = this.handleChange.bind(this);
+
+    	
+    	
 		this.state.temp = "";
 
 		this.state.tripArray = []; //stores input box value
@@ -35,10 +48,21 @@ export default class Iphone extends Component {
 		this.setState({ displayTrip: false });
 	}
 
-	formatDate = (dates) => {
-		var date = dates.replace(/\//g, '').replace("/ /g", '').replace("-", '');
-		this.state.tripArray[2] = date.substring(0, 4);
-		this.state.tripArray[3] = date.substring(4, 8);
+	handleChange(date) {
+    	this.setState({
+     	startDate: date});
+  	}
+  	handleEndChange(date){
+  		this.setState({
+  			endDate:date
+  		});
+  	}
+
+	formatDate = (start, end) => {
+		var start = start.replace(/\//g, '').replace("/ /g", '');
+		var end = end.replace(/\//g, '').replace("/ /g", '');
+		this.state.tripArray[2] = start.substring(0, 4);
+		this.state.tripArray[3] = end.substring(0, 4);
 	}
 
 	fetchWeatherData = () => {
@@ -53,9 +77,13 @@ export default class Iphone extends Component {
 
 		// API URL with a structure of : ttp://api.wunderground.com/api/key/feature/q/country-code/city.json
 		var tripString = ($("#tripParameters").val()?$("#tripParameters").val():alert('please fill the text field'));
-		this.state.tripArray = tripString.split(", "); //City, Country or State, Depart, Return
-		this.formatDate(this.state.tripArray[2]);
-
+		
+		this.state.tripArray = tripString.split(", "); //City, Country or State
+		var arrival = ($("#arrivalDate").val()?$("#arrivalDate").val():alert('please enter an arrival date'));
+		var depart = ($("#departDate").val()?$("#departDate").val():alert('please enter a departure date'));
+		
+		this.formatDate(arrival, depart);
+		console.log(this.state.tripArray);
 		var url = "http://api.wunderground.com/api/3936b5e226765093/conditions/" + "planner_" + this.state.tripArray[2] + this.state.tripArray[3] + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
 
 		$.ajax({
@@ -85,6 +113,20 @@ export default class Iphone extends Component {
 						<input id="tripParameters" type="text" name="trip" placeholder="Search for a city" onKeyPress={this.searchEnter} />
 						<input type="image" name="search" src="../../assets/icons/search.png"
 						onClick={ this.fetchWeatherData } />
+						<div className={style.navHalf}>
+							<DatePicker
+								id="arrivalDate"
+								placeholderText = "Arrival Date" 
+								dateFormat="MM/DD/YYYY" 
+								selected={this.state.startDate} 
+								onChange={this.handleChange} />
+							<DatePicker 
+								id = "departDate"
+								placeholderText="Departure Date"
+								dateFormat="MM/DD/YYYY" 
+								selected={this.state.endDate} 
+								onChange={this.handleEndChange} />
+						</div>
 					</div>
 
 
