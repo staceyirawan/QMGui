@@ -21,8 +21,8 @@ export default class Iphone extends Component {
     	this.handleEndChange = this.handleEndChange.bind(this);
     	this.handleChange = this.handleChange.bind(this);
 
-    	
-    	
+
+
 		this.state.temp = "";
 
 		this.state.tripArray = []; //stores input box value
@@ -77,11 +77,11 @@ export default class Iphone extends Component {
 
 		// API URL with a structure of : ttp://api.wunderground.com/api/key/feature/q/country-code/city.json
 		var tripString = ($("#tripParameters").val()?$("#tripParameters").val():alert('please fill the text field'));
-		
+
 		this.state.tripArray = tripString.split(", "); //City, Country or State
 		var arrival = ($("#arrivalDate").val()?$("#arrivalDate").val():alert('please enter an arrival date'));
 		var depart = ($("#departDate").val()?$("#departDate").val():alert('please enter a departure date'));
-		
+
 		this.formatDate(arrival, depart);
 		console.log(this.state.tripArray);
 		var url = "http://api.wunderground.com/api/3936b5e226765093/conditions/" + "planner_" + this.state.tripArray[2] + this.state.tripArray[3] + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
@@ -110,22 +110,27 @@ export default class Iphone extends Component {
 				<div class= { style_iphone.container }>
 				<div>
 					<div className={style.nav}>
-						<input id="tripParameters" type="text" name="trip" placeholder="Search for a city" onKeyPress={this.searchEnter} />
+						<input id="tripParameters" type="text" name="trip" placeholder="City, Country" onKeyPress={this.searchEnter} />
 						<input type="image" name="search" src="../../assets/icons/search.png"
 						onClick={ this.fetchWeatherData } />
 						<div className={style.navHalf}>
-							<DatePicker
-								id="arrivalDate"
-								placeholderText = "Arrival Date" 
-								dateFormat="MM/DD/YYYY" 
-								selected={this.state.startDate} 
-								onChange={this.handleChange} />
-							<DatePicker 
-								id = "departDate"
-								placeholderText="Departure Date"
-								dateFormat="MM/DD/YYYY" 
-								selected={this.state.endDate} 
-								onChange={this.handleEndChange} />
+							<div className={style.arrivalDate}>
+								<DatePicker
+									id="arrivalDate"
+									placeholderText = "Arrival"
+									dateFormat="MM/DD/YYYY"
+									selected={this.state.startDate}
+									onChange={this.handleChange} />
+							</div>
+							<p className={style.returnIcon}>⇆</p>
+							<div className={style.departureDate}>
+								<DatePicker
+									id = "departDate"
+									placeholderText="Departure"
+									dateFormat="MM/DD/YYYY"
+									selected={this.state.endDate}
+									onChange={this.handleEndChange} />
+							</div>
 						</div>
 					</div>
 
