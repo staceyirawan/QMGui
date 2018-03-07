@@ -56,7 +56,7 @@ export default class Iphone extends Component {
 		this.state.tripArray = tripString.split(", "); //City, Country or State, Depart, Return
 		this.formatDate(this.state.tripArray[2]);
 
-		var url = "http://api.wunderground.com/api/9e7726cd8a6a3795/conditions/" + "planner_" + this.state.tripArray[2] + this.state.tripArray[3] + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
+		var url = "http://api.wunderground.com/api/3936b5e226765093/conditions/" + "planner_" + this.state.tripArray[2] + this.state.tripArray[3] + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
 
 		$.ajax({
 			url: url,
@@ -118,7 +118,7 @@ export default class Iphone extends Component {
 	}
 
 	fetchAlertData = (zip, magic, wmo) => {
-		var urlAlerts = "http://api.wunderground.com/api/9e7726cd8a6a3795/alerts/q/zmw:" + zip + "." + magic + "." + wmo + ".json";
+		var urlAlerts = "http://api.wunderground.com/api/3936b5e226765093/alerts/q/zmw:" + zip + "." + magic + "." + wmo + ".json";
 
 		$.ajax({
 			url: urlAlerts,
@@ -148,7 +148,7 @@ export default class Iphone extends Component {
 		for ( var d = departDate; d <= returnDate; d.setDate(d.getDate() + 1)){
 			var month = this.convertTwoDigit(d.getMonth());
 			var day = this.convertTwoDigit(d.getDate());
-			var urlDaily = "http://api.wunderground.com/api/9e7726cd8a6a3795/history_2017" + month + day + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
+			var urlDaily = "http://api.wunderground.com/api/3936b5e226765093/history_2017" + month + day + "/q/" + this.state.tripArray[1] + "/" + this.state.tripArray[0] + ".json";
 			this.dailyCall(urlDaily);
 		}
 	}

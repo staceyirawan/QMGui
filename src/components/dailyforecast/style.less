@@ -108,9 +108,16 @@ ul {
 	}
 }
 
-img.image {
-  height: 20px;
-  width: 20px;
+img.packingIcon {
+  height: 70%;
+  display: inline-block;
+  float: left;
+}
+
+span.packingLabel {
+	display: inline-block;
+	margin-top: 10px;
+	font-weight: bold;
 }
 
 div.luggage {
@@ -127,6 +134,12 @@ li.suggestedItem {
 	display: inline-block;
 	width: 42.5%;
 	margin-left: 5%;
+	margin-bottom: 5%;
+	border-radius: 10px;
+	height: 135px;
+	position: relative;
+	padding-top: 10px;
+	padding-left: 10px;
 }
 
 img.luggageHandle {
@@ -145,4 +158,49 @@ img.luggageWheel2 {
 img.luggageWheel2 {
 	margin-left: 50%;
 	margin-top: -10px;
+}
+
+input.check {
+	position: absolute;
+	z-index: -1000;
+	left: -1000px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	width: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+}
+
+input.check + label.checkBox {
+	padding-left: 25px;
+	height: 25px;
+	display: inline-block;
+	line-height: 25px;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	font-size: 25px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+input.check:checked + label.checkBox {
+	background-position: 0 -25px;
+}
+
+label.checkBox {
+	background-image: url("../../assets/icons/checkboxes2.png");
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+div.checkContainer {
+	position: absolute;
+	top: 10px;
+	right: -48px;
 }

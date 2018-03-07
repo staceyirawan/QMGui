@@ -41,7 +41,7 @@ export default class DayForecast extends Component {
 
     return (
       <div className={style.day}>
-        &nbsp; {this.props.day}/{this.props.month}
+        &nbsp; {this.props.month}/{this.props.day}
 				{
 				/* Not sure how to nest classes in less, current solution is use icon vs span*/
 				precip ?

@@ -2,6 +2,7 @@
 import { h, render, Component } from 'preact';
 import style from './style';
 import DayForecast from '../dayForecast';
+import $ from 'jquery';
 
 export default class DailyForecast extends Component {
 	constructor(props){
@@ -22,7 +23,7 @@ export default class DailyForecast extends Component {
 	}
 
 	hide(e){
-		if(e && e.relatedTarget){
+		if (e && e.relatedTarget){
 			e.relatedTarget.click();
 		}
 		this.setState({showDropdown: false});
@@ -34,40 +35,45 @@ export default class DailyForecast extends Component {
 		this.setState();
 	}
 
-	toggle(e) {
-    let checked = !this.state.checked;
-    this.setState({ checked });
-  }
-
 	image(jpg) {
-		if (jpg == "Winter Jacket"||"Down Jacket"||"Windbreaker"||"Long Underwear"
+		if (jpg === "Winter Jacket"||"Down Jacket"||"Windbreaker"||"Long Underwear"
 		||"T-shirts"||"Long-sleeved shirt"||"Sweater"||"Shorts"||"Pants"
 		||"Sunglasses"||"Umbrella"||"Snow Boots"||"Gloves"||"Scarf") {
 			let itemP = jpg.toLowerCase();
 			let itemPi = itemP.replace(" ", "-");
 			let itemPic = "../assets/icons/" + itemPi + ".png";
 			return itemPic;
-		} else {
-			return "../assets/icons/unknown-item.png";
+		}
+
+		return "../assets/icons/unknown-item.png";
+	}
+
+	greyOut(i) {
+		return () => {
+			let id = i.split(" ")[0]
+			if ($("#"+id).is(':checked'))
+				$("#"+id).parent().parent().css("background-color", "#D8DDDD");
+			else
+				$("#"+id).parent().parent().css("background-color", "#BBB");
 		}
 	}
 
-	render({}, {checked}) {
+	render({}) {
 		let showDropdown = this.state.showDropdown;
 		let dayArray = this.props.dayArray;
 		let items = this.props.items;
 
-		var days = [];
-		for (var i=0; i< dayArray.length; i++){
+		let days = [];
+		for (let i=0; i< dayArray.length; i++){
 			let d = dayArray[i];
 			days.push(
 				<DayForecast month={d.month} day={d.day} high={d.maxT} low={d.minT} rainLvl={d.rainLvl} iconName={d.icon} />
 			);
 		}
 
-		var bring = [];
-		for (var key in items) {
-			if (items[key] == true) {
+		let bring = [];
+		for (let key in items) {
+			if (items[key] === true) {
 				bring.push(key);
 			}
 		}
@@ -95,12 +101,13 @@ export default class DailyForecast extends Component {
 				<div className={style.luggage}>
 			    <ul>
 			      {bring.map(i =>
-			      	<li className={style.suggestedItem} key={i}>
-								<img className={style.image} src={this.image(i)} />
-							 	{i}
-								<label>
-		            	  <input type="checkbox" checked={checked} onClick={this.toggle} />
-			          </label>
+							<li className={style.suggestedItem} key={i}>
+								<img className={style.packingIcon} src={this.image(i)} />
+								<span className={style.packingLabel}>{i}</span>
+								<div className={style.checkContainer}>
+									<input id={i.split(" ")[0]} type="checkbox" className={style.check} onClick={this.greyOut(i)}/>
+									<label className={style.checkBox} for={i.split(" ")[0]}></label>
+								</div>
 							</li>)
 			      }
 			    </ul>
