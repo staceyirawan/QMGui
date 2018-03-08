@@ -82,6 +82,7 @@ export default class DailyForecast extends Component {
 		let showDropdown = this.state.showDropdown;
 		let dayArray = this.props.dayArray;
 		let items = this.props.items;
+		let alerts = this.props.alerts;
 
 		let days = [];
 		for (let i=0; i< dayArray.length; i++){
@@ -100,6 +101,25 @@ export default class DailyForecast extends Component {
 
 		return (
 			<div>
+				<div className={style.alertBox}>
+					<ul>
+						{alerts.map(i =>
+							<li className={style.alertCircle} key={i} style={{background: i[1]}}>
+								<div>
+									<div>
+										<img className={style.alertImage} src="../../assets/icons/warning-sign.png" />
+									</div>
+									<div>
+										<span className={style.alertName}>{i[0]}</span>
+									</div>
+									<div className={style.alertDescDiv}>
+										<span className={style.alertDesc}>{i[2]}</span>
+									</div>
+								</div>
+							</li>)
+						}
+					</ul>
+				</div>
 				<div className={style.dailyWeather}>
 					<div className={style.bar}>
 						<div className={style.dailyText}>Daily weather forecast</div>

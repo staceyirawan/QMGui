@@ -138,7 +138,7 @@ export default class Iphone extends Component {
 				  { this.state.displayTrip ?
 						<div>
 							<TripSummary high={this.state.tempHigh} low={this.state.tempLow} iconName={this.state.summaryIcon}/>
-							<DailyForecast dayArray={this.state.dayArray} items={this.state.itemBool}/>
+							<DailyForecast alerts={this.state.alertArray} dayArray={this.state.dayArray} items={this.state.itemBool}/>
 						</div>
 						:
 						<div class="landing">
@@ -272,10 +272,11 @@ export default class Iphone extends Component {
 		var alerts = [];
 		for ( var i =0; i < numAlerts; i++){
 			//grabbing name of alert and the color warning
-			var alertPair = [parsed_json['alerts'][i]['wtype_meteoalarm_name'], parsed_json['alerts'][i]['level_meteoalarm_name']];
+			var alertPair = [parsed_json['alerts'][i]['wtype_meteoalarm_name'],
+											parsed_json['alerts'][i]['level_meteoalarm_name'],
+											parsed_json['alerts'][i]['description']];
 			alerts.push(alertPair);
 		}
-
 		this.state.alertArray = alerts;
 		this.fetchDailyData();
 	}
